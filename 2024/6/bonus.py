@@ -1,45 +1,9 @@
 
-def find_player(lst):
-    for i in range(len(lst)):
-        for j in range(len(lst[i])):
-            if lst[i][j] in "^>v<":
-                return j, i, lst[i][j]
-
-def next_move(lst, x, y, d):
-    if lst[y][x] == 'E':
-        return None
-    return x, y, d
-
-def next_coo(lst, x, y, d):
-    match lst[y][x]:
-        case '^':
-            if lst[y - 1][x] == '#':
-                lst[y][x] = '>'
-                d = '>'
-                return next_coo(lst, x, y, d)
-            y -= 1
-        case 'v':
-            if lst[y + 1][x] == '#':
-                lst[y][x] = '<'
-                d = '<'
-                return next_coo(lst, x, y, d)
-            y += 1
-        case '>':
-            if lst[y][x + 1] == '#':
-                lst[y][x] = 'v'
-                d = 'v'
-                return next_coo(lst, x, y, d)
-            x += 1
-        case '<':
-            if lst[y][x - 1] == '#':
-                lst[y][x] = '^'
-                d = '^'
-                return next_coo(lst, x, y, d)
-            x -= 1
-    return x, y, d
 
 if __name__ == "__main__":
+    from manda import *
     import copy
+
     base = list()
     with open("entry.txt") as my_file:
         for line in my_file:
@@ -66,14 +30,14 @@ if __name__ == "__main__":
             lst = copy.deepcopy(base)
             lst[i][j] = '#'
             coo = copy.deepcopy(coo_base)
-            tracé = list() 
+            count = 0
             tmp = find_player(lst)
-            while (tmp := next_move(lst, *next_coo(lst, *coo))) and tmp  not in tracé:
+            while (tmp := next_move(lst, *next_coo(lst, *coo))) and count < 8000:
                 lst[coo[1]][coo[0]] = 'X'
                 lst[tmp[1]][tmp[0]] = tmp[2]
                 coo = tmp
-                tracé.append(coo)
-            if tmp in tracé:
+                count += 1
+            if count == 8000: 
                 res += 1
 
     print(res)
