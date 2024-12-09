@@ -1,32 +1,35 @@
-def base_3(n):
-    if n == 0:
-        return "0"
-    digits = []
-    while n:
-        digits.append(str(n % 3))
-        n //= 3
-    return ''.join(digits[::-1])
 
-total = 0
-print("take some time to execute (about 1 minute). Please wait, there are no infinite loops, promise")
-with open("entry.txt") as my_file:
-    for line in my_file:
-        res = int(line.split(':')[0])
-        facts = [int(elem) for elem in line.split(':')[1].split()]
-        l = len(facts) - 1;
-        for i in range(3 ** l):
-            chars = f"{base_3(i) :0>{l}}"
-            r = facts[0]
-            j = 0
-            while j < len(facts) - 1:
-                nb = facts[j + 1]
-                if chars[j] == '0': r += nb
-                elif chars[j] == '1' : r *= nb
-                else : r = int(str(r) + str(nb))
-                if r > res: break 
-                j += 1
-            if r == res:
-                total += res
+if __name__ == "__main__":
+
+    infile = str()
+    res = list();
+    with open("entry.txt") as my_file:
+        for line in my_file:
+            if line[-1] == '\n':
+                infile += line[:-1]
+            else:
+                infile += line
+    space = False
+    i = 0
+    for char in infile:
+        if space:
+            res += ['.'] * int(char)
+            space = False
+        else:
+            res += [i] * int(char)
+            space = True
+            i += 1
+    elem = i - 1
+    while elem:
+        space = res.count(elem)
+        for i in range(min(res.index(elem),len(res) - space)):
+            if res[i:i + space].count('.') == space:
+                res = list(map(lambda x: '.' if x == elem else x, res))
+                res = res[:i] + [elem] * space + res[i + space:]
                 break
-
-print(total)
+        elem -= 1
+    total = 0
+    for i, elem in enumerate(res):
+        if elem != '.':
+            total += i * elem
+    print(total)
