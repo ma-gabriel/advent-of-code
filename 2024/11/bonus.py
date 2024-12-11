@@ -1,13 +1,24 @@
 
 
 def update(stones):
-    if stone == 0:
-        return [1]
-    strStone = str(stone)
-    lenStone = len(strStone)
-    if lenStone % 2:
-        return [stone * 2024]
-    return [int(strStone[:lenStone // 2]), int(strStone[lenStone // 2:])]
+    res = list()
+    for stone, poids in stones:
+        strStone = str(stone)
+        lenStone = len(strStone)
+        if stone == 0:
+            res.append([1, poids])
+        elif not lenStone % 2:
+            res.append([int(strStone[:lenStone // 2]), poids])
+            res.append([int(strStone[lenStone // 2:]), poids])
+        else:
+            res.append([stone * 2024, poids])
+    dictio = dict()
+    for stone, poids in res:
+        if stone not in dictio:
+            dictio[stone] = poids
+        else:
+            dictio[stone] += poids
+    return list(dictio.items())
 
 if __name__ == "__main__":
 
@@ -18,12 +29,7 @@ if __name__ == "__main__":
                 infile += line[:-1]
             else:
                 infile += line
-    stones = [int(elem) for elem in infile.split()]
+    stones = [[int(elem), 1] for elem in infile.split()]
     for i in range(75):
-        tmp = list()
-        for stone in stones:
-            tmp += update(stone)
-        stones = tmp
-        print(f"blink {i + 1} out of 75")
-
-    print(len(stones))
+        stones = update(stones)
+    print(sum(dict(stones).values()))
