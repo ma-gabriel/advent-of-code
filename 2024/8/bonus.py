@@ -1,32 +1,53 @@
-def base_3(n):
-    if n == 0:
-        return "0"
-    digits = []
-    while n:
-        digits.append(str(n % 3))
-        n //= 3
-    return ''.join(digits[::-1])
+def is_valid(doc, i, j):
+    if i < 0 or j < 0:
+        return 0
+    if i >= len(doc):
+        return 0
+    if j >= len(doc[i]):
+        return 0
+    return 1
+
+def change(doc, i, j, elem, tmp):
+    if (i, j) in tmp[elem]:
+        return 0
+    tmp[elem].append((i, j))
+    return 1
 
 total = 0
-print("take some time to execute (about 1 minute). Please wait, there are no infinite loops, promise")
 with open("entry.txt") as my_file:
+    doc = list()
     for line in my_file:
-        res = int(line.split(':')[0])
-        facts = [int(elem) for elem in line.split(':')[1].split()]
-        l = len(facts) - 1;
-        for i in range(3 ** l):
-            chars = f"{base_3(i) :0>{l}}"
-            r = facts[0]
-            j = 0
-            while j < len(facts) - 1:
-                nb = facts[j + 1]
-                if chars[j] == '0': r += nb
-                elif chars[j] == '1' : r *= nb
-                else : r = int(str(r) + str(nb))
-                if r > res: break 
-                j += 1
-            if r == res:
-                total += res
-                break
+        doc.append(list(line)[:-1])
 
-print(total)
+antennas = dict()
+for i in range(len(doc)):
+    for j in range(len(doc[i])):
+        elem = doc[i][j]
+        if elem == '.':
+            continue
+        if elem in antennas:
+            antennas[elem].append((i, j))
+        else:
+            antennas[elem] = [(i, j)]
+
+sub = dict()
+for elem, lst in antennas.items():
+    sub[elem] = list()
+    for coo1 in lst:
+        for coo2 in lst:
+            if coo1 == coo2:
+                continue
+            t1, t2 = coo1[0] - coo2[0], coo1[1] - coo2[1]
+            d1 = d2 = 0
+            while (is_valid(doc, coo1[0] + d1, coo1[1] + d2) or is_valid(doc, coo2[0] - d1, coo2[1] - d2)):
+                if is_valid(doc, coo1[0] + d1, coo1[1] + d2):
+                    change(doc, coo1[0] + d1, coo1[1] + d2, elem, sub)
+                if is_valid(doc, coo2[0] - d1, coo2[1] - d2):
+                    change(doc, coo2[0] - d1, coo2[1] - d2, elem, sub)
+                d1 += t1
+                d2 += t2
+res = set()
+for value in sub.values():
+    for val in value:
+        res.add(val)
+print(len(res))
