@@ -24,8 +24,10 @@ if __name__ == "__main__":
         space = res.count(elem)
         for i in range(min(res.index(elem),len(res) - space)):
             if res[i:i + space].count('.') == space:
+                print(*res, sep="")
                 res = list(map(lambda x: '.' if x == elem else x, res))
                 res = res[:i] + [elem] * space + res[i + space:]
+                print(*res, sep="")
                 break
         elem -= 1
     total = 0
