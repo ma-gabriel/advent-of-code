@@ -30,8 +30,5 @@ if __name__ == "__main__":
                 infile['B'] = (int(line[12:14]), int(line[18:20]))
             elif line.startswith("Prize:"):
                 infile['P'] = (10000000000000 + int(line[line.find("X=") + 2: line.find(",")]), 10000000000000 + int(line[line.find("Y=") + 2:]))
-            if line == "\n":
-                tmp = get_score(infile)
-                print("new machine", tmp)
-                total += tmp
+                total +=  get_score(infile)
     print(total)
