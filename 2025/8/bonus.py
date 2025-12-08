@@ -1,8 +1,6 @@
 
 import math
 
-print("that codes takes 34 seconds on the coder's computer for the true output, be patient")
-
 with open("entry.txt") as my_file:
     poles = []
     for line in my_file:
@@ -39,4 +37,6 @@ with open("entry.txt") as my_file:
                     last = pole1[0] * pole2[0]
         if not added:
             circuits.append([pole1, pole2])
-print(last)
+        if len(set(circuits[0])) == len(poles):
+            print(pole1[0] * pole2[0])
+            break
