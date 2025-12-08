@@ -15,28 +15,25 @@ with open("entry.txt") as my_file:
             dists.append([math.dist(pole1, pole2), pole1, pole2])
     dists.sort()
     circuits = []
-    last = None
     for dist, pole1, pole2 in dists:
         added = False
         for circuit in circuits:
             if pole1 in circuit:
                 if added == False:
-                    circuit.append(pole2)
+                    circuit.add(pole2)
                     added = circuit
                 else:
-                    added += circuit
+                    added |= circuit
                     circuit.clear()
-                    last = pole1[0] * pole2[0]
             elif pole2 in circuit:
                 if added == False:
-                    circuit.append(pole1)
+                    circuit.add(pole1)
                     added = circuit
                 else:
-                    added += circuit
+                    added |= circuit
                     circuit.clear()
-                    last = pole1[0] * pole2[0]
         if not added:
-            circuits.append([pole1, pole2])
-        if len(set(circuits[0])) == len(poles):
+            circuits.append({pole1, pole2})
+        if len(circuits[0]) == len(poles):
             print(pole1[0] * pole2[0])
             break
