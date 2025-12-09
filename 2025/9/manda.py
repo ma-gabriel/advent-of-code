@@ -14,4 +14,4 @@ with open("entry.txt") as my_file:
                 res = (abs(tile2[0] - tile1[0]) + 1) * (abs(tile2[1] - tile1[1]) + 1)
                 biggest = abs((tile2[0] - tile1[0]) * (tile2[1] - tile1[1]))
 
-print(biggest)
+print(res)
