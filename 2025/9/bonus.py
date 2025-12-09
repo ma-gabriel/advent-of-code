@@ -1,5 +1,5 @@
 
-print("takes 30 seconds to run on the (slow) computer of the guy who wrote that. Be patient")
+print("takes 11 seconds to run on the (slow) computer of the guy who wrote that. Be patient")
 
 with open("entry.txt") as my_file:
     tiles = []
@@ -16,14 +16,19 @@ with open("entry.txt") as my_file:
     for i, tile1 in enumerate(tiles):
         for j, tile2 in enumerate(tiles[i + 1:]):
             if abs((tile2[0] - tile1[0]) * (tile2[1] - tile1[1])) > biggest:
+                min_x = min(tile1[0], tile2[0])
+                max_x = max(tile1[0], tile2[0])
+                min_y = min(tile1[1], tile2[1])
+                max_y = max(tile1[1], tile2[1])
                 for i, tile in enumerate(tiles):
-                    if len({tile1, tile2, tiles[i], tiles[(i + 1) % nb]}) == 2:
+                    next_tile = tiles[(i + 1) % nb]
+                    if len({tile1, tile2, tile, next_tile}) == 2:
                         continue
-                    if tiles[i][0] != tiles[(i + 1) % nb][0] and min(tile1[1], tile2[1]) < tile[1] < max(tile1[1], tile2[1]) and  min(tiles[i][0], tiles[(i + 1) % nb][0]) <= min(tile1[0], tile2[0]) and max(tiles[i][0], tiles[(i + 1) % nb][0]) >= max(tile1[0], tile2[0]):
+                    if tile[0] != next_tile[0] and min_y < tile[1] < max_y and min(tile[0], next_tile[0]) <= min_x and max(tile[0], next_tile[0]) >= max_x:
                         break
-                    if tiles[i][1] != tiles[(i + 1) % nb][1] and min(tile1[0], tile2[0]) < tile[0] < max(tile1[0], tile2[0]) and min(tiles[i][1], tiles[(i + 1) % nb][1]) <= min(tile1[1], tile2[1]) and max(tiles[i][1], tiles[(i + 1) % nb][1]) >= max(tile1[1], tile2[1]):
+                    if tile[1] != next_tile[1] and min_x < tile[0] < max_x and min(tile[1], next_tile[1]) <= min_y and max(tile[1], next_tile[1]) >= max_y:
                         break
-                    if min(tile1[0], tile2[0]) < tile[0] < max(tile1[0], tile2[0]) and min(tile1[1], tile2[1]) < tile[1] < max(tile1[1], tile2[1]): 
+                    if min_x < tile[0] < max_x and min_y < tile[1] < max_y: 
                         break
                 else: 
                     biggest = abs((tile2[0] - tile1[0]) * (tile2[1] - tile1[1]))
