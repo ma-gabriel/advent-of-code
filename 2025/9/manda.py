@@ -7,10 +7,11 @@ with open("entry.txt") as my_file:
         if len(line) == 0:
             continue
         tiles.append(tuple(int(elem) for elem in line.split(',')))
-    dists = []
+    biggest = 0
     for i, tile1 in enumerate(tiles):
         for tile2 in tiles[i + 1:]:
-            dists.append([(abs(tile2[0] - tile1[0]) + 1) * (abs(tile2[1] - tile1[1]) + 1), tile1, tile2])
-    dists.sort()
+            if abs((tile2[0] - tile1[0]) * (tile2[1] - tile1[1])) > biggest:
+                res = (abs(tile2[0] - tile1[0]) + 1) * (abs(tile2[1] - tile1[1]) + 1)
+                biggest = abs((tile2[0] - tile1[0]) * (tile2[1] - tile1[1]))
 
-print(dists[-1][0])
+print(biggest)
